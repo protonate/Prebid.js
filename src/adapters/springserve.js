@@ -27,9 +27,16 @@ var SpringServeAdapter = function SpringServeAdapter() {
           spCall += params[requestAttrMap[property]];
         }
       }
-      
+
+      var domain = window.location.hostname;
+
+      //override domain when testing
+      if(params.hasOwnProperty("test") && params["test"] === true){
+        domain = "test.com";
+      }
+
       spCall += "&domain=";
-      spCall += window.location.hostname;
+      spCall += domain;
       spCall += "&callback=pbjs.handleSpringServeCB";
 
       return  spCall
