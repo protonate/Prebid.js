@@ -32,6 +32,7 @@ var SpringServeAdapter = function SpringServeAdapter() {
 
       //override domain when testing
       if(params.hasOwnProperty("test") && params["test"] === true){
+        spCall += "&debug=true";
         domain = "test.com";
       }
 
@@ -46,13 +47,14 @@ var SpringServeAdapter = function SpringServeAdapter() {
       bids = params.bids || [];
       for (var i = 0; i < bids.length; i++) {
         var bid = bids[i];
-        bidmanager.pbCallbackMap[bid.params.imp_id] = params;
+        bidmanager.pbCallbackMap[bid.params.impId] = params;
         adloader.loadScript(buildSpringServeCall(bid))
       }
     }
 
     pbjs.handleSpringServeCB = function(responseObj){
-      if(responseObj && responseObj.seatbid && responseObj.seatbid.length > 0){
+      if(responseObj && responseObj.seatbid && responseObj.seatbid.length > 0 &&
+        responseObj.seatbid[0].bid[0] !== undefined){
         //look up the request attributs stored in the bidmanager
         var responseBid = responseObj.seatbid[0].bid[0];
         var requestObj = bidmanager.getPlacementIdByCBIdentifer(responseBid.impid);
